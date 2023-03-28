@@ -7,6 +7,7 @@ const userRoute = require("./routes/user");
 
 const { readdirSync } = require("fs");
 dotenv.config();
+app.use(express.json());
 app.use(cors());
 // read all files in route dynamically
 readdirSync("./routes").map((r) =>
