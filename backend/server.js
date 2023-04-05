@@ -3,8 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const app = express();
-const userRoute = require("./routes/user");
-
+dotenv.config({ path: "config/config.env" });
 const { readdirSync } = require("fs");
 dotenv.config();
 app.use(express.json());
@@ -16,8 +15,10 @@ readdirSync("./routes").map((r) =>
 
 //DB CONNECTION
 mongoose
-  .connect(process.env.DB_URL, {
+  .connect(`${process.env.DB_URL}`, {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useUnifiedTopology: true,
   })
   .then(() => {
     console.log("db connected");
