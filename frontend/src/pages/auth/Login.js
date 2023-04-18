@@ -9,9 +9,8 @@ export const Login = () => {
     <div className="login">
       <div className="login_wrapper">
         <LoginForm />
-        <div className="register">
-          <RegisterForm />
-        </div>
+        <RegisterForm />
+
         <FooterLogin />
       </div>
     </div>

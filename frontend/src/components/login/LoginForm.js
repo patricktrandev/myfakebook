@@ -11,7 +11,7 @@ const loginInfos = {
 export const LoginForm = () => {
   const [login, setLogin] = useState(loginInfos);
   const { email, password } = login;
-  console.log(login);
+
   const handleLogin = (e) => {
     const { name, value } = e.target;
     setLogin({ ...login, [name]: value });
