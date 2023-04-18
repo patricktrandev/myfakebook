@@ -1,6 +1,5 @@
 import React from "react";
 import "./loginInput.css";
-import "./loginInput.css";
 import { useMediaQuery } from "react-responsive";
 import { ErrorMessage, useField } from "formik";
 export const LoginInput = ({ placeholder, bottom, ...props }) => {
