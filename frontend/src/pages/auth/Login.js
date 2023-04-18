@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import { Link } from "react-router-dom";
+import * as Yup from "yup";
 import "./login.css";
 import { LoginInput } from "../../components/inputs/loginInput/LoginInput";
 const loginInfos = {
@@ -15,6 +16,13 @@ export const Login = () => {
     const { name, value } = e.target;
     setLogin({ ...login, [name]: value });
   };
+  const loginValidation = Yup.object({
+    email: Yup.string()
+      .required("Email address is required.")
+      .email("Oops! Must be a valid email.")
+      .max(100),
+    password: Yup.string().required("Password is required."),
+  });
   return (
     <div className="login">
       <div className="login_wrapper">
@@ -33,6 +41,7 @@ export const Login = () => {
                   email,
                   password,
                 }}
+                validationSchema={loginValidation}
               >
                 {(formik) => (
                   <Form>
@@ -47,6 +56,7 @@ export const Login = () => {
                       name="password"
                       type="password"
                       onChange={handleLogin}
+                      bottom
                     />
                     <button type="submit" className="blue_btn">
                       Log In
@@ -55,7 +65,7 @@ export const Login = () => {
                 )}
               </Formik>
               <Link to="/forgot" className="forgot_password">
-                Forgotten password ?
+                Forgotten password?
               </Link>
               <div className="sign_splitter"></div>
               <button className="blue_btn open_signup">Create Account</button>
