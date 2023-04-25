@@ -1,9 +1,17 @@
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import CircleLoader from "react-spinners/CircleLoader";
 import { RegisterInput } from "../inputs/registerInput/RegisterInput";
 import * as Yup from "yup";
 import { DateOfBirthSelect } from "./DateOfBirthSelect";
 import { GenderSelect } from "./GenderSelect";
+import { LOGIN } from "../../redux/constant/userConstant";
+
 const registerInfos = {
   first_name: "",
   last_name: "",
@@ -14,13 +22,16 @@ const registerInfos = {
   bDay: new Date().getDate(),
   gender: "",
 };
-export const RegisterForm = () => {
-  const [dateError, setDateError] = useState("");
-  const [genderError, setGenderError] = useState("");
-
+export const RegisterForm = ({ setVisible }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [dateError, setDateError] = useState("");
+  const [genderError, setGenderError] = useState("");
+
   const [registerUser, setRegisterUser] = useState(registerInfos);
   const {
     first_name,
@@ -70,7 +81,31 @@ export const RegisterForm = () => {
       .min(6, "Password must be atleast 6 characters.")
       .max(36, "Password can't be more than 36 characters"),
   });
-  console.log(registerUser);
+  const registerSubmit = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        "http://localhost:8000/api/v1/register",
+        registerUser
+      );
+      setError("");
+      if (data) {
+        setLoading(false);
+        setSuccess(data.message);
+      }
+
+      setTimeout(() => {
+        dispatch({ type: LOGIN, payload: data });
+        Cookies.set("user", JSON.stringify(data));
+        navigate("/");
+      }, 2000);
+    } catch (err) {
+      setLoading(false);
+      setSuccess("");
+      setError(err.response.data.message);
+    }
+  };
+
   const handleRegisterSubmit = () => {
     let currentDate = new Date();
     let pickedDate = new Date(bYear, bMonth - 1, bDay);
@@ -86,23 +121,23 @@ export const RegisterForm = () => {
       setDateError(
         "It looks like you've enetered the wrong info.Please make sure that you use your real date of birth."
       );
-    } else {
+    } else if (gender === "") {
       setDateError("");
-    }
-
-    if (gender === "") {
       setGenderError(
         "Please choose a gender. You can change who can see this later."
       );
     } else {
+      setDateError("");
       setGenderError("");
+      registerSubmit();
     }
   };
+
   return (
     <div className="blur">
       <div className="register">
         <div className="register_header">
-          <i className="exit_icon"></i>
+          <i className="exit_icon" onClick={() => setVisible(false)}></i>
           <span>Sign Up</span>
           <span>it's quick and easy</span>
         </div>
@@ -188,6 +223,12 @@ export const RegisterForm = () => {
                   Sign Up
                 </button>
               </div>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <CircleLoader color="red" loading={loading} size={50} />
+              </div>
+
+              {error && <div className="error_text">{error}</div>}
+              {success && <div className="success_text">{success}</div>}
             </Form>
           )}
         </Formik>

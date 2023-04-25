@@ -1,14 +1,24 @@
 import React, { useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { Formik, Form } from "formik";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import CircleLoader from "react-spinners/CircleLoader";
 import * as Yup from "yup";
 import { LoginInput } from "../inputs/loginInput/LoginInput";
+import { LOGIN } from "../../redux/constant/userConstant";
 const loginInfos = {
   email: "",
   password: "",
 };
 
-export const LoginForm = () => {
+export const LoginForm = ({ setVisible }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [login, setLogin] = useState(loginInfos);
   const { email, password } = login;
 
@@ -23,6 +33,26 @@ export const LoginForm = () => {
       .max(100),
     password: Yup.string().required("Password is required."),
   });
+  const handleLoginSubmit = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post("http://localhost:8000/api/v1/login", {
+        email,
+        password,
+      });
+      const { message, ...rest } = data;
+      if (data) {
+        setLoading(false);
+      }
+      dispatch({ type: LOGIN, payload: rest });
+      Cookies.set("user", JSON.stringify(rest));
+      navigate("/");
+    } catch (err) {
+      setLoading(false);
+
+      setError(err.response.data.message);
+    }
+  };
   return (
     <>
       <div className="login_wrap">
@@ -41,6 +71,7 @@ export const LoginForm = () => {
                 password,
               }}
               validationSchema={loginValidation}
+              onSubmit={handleLoginSubmit}
             >
               {(formik) => (
                 <Form>
@@ -60,6 +91,12 @@ export const LoginForm = () => {
                   <button type="submit" className="blue_btn">
                     Log In
                   </button>
+                  <br />
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <CircleLoader color="red" loading={loading} size={50} />
+                  </div>
+
+                  {error && <div className="error_text">{error}</div>}
                 </Form>
               )}
             </Formik>
@@ -67,8 +104,16 @@ export const LoginForm = () => {
               Forgotten password?
             </Link>
             <div className="sign_splitter"></div>
-            <button className="blue_btn open_signup">Create Account</button>
+            <button
+              className="blue_btn open_signup"
+              onClick={() => {
+                setVisible(true);
+              }}
+            >
+              Create Account
+            </button>
           </div>
+
           <Link to="/" className="sign_extra">
             <b>Create a Page </b>
             for a celebrity, brand or business.
