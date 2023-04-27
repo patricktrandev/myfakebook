@@ -61,6 +61,9 @@ export const LoginForm = ({ setVisible }) => {
           <span>
             Facebook helps you connect and share with the people in your life.
           </span>
+          <span style={{ fontSize: "12px" }}>
+            Author : Patrick - Only for educational purpose
+          </span>
         </div>
         <div className="login_2">
           <div className="login_2_wrap">

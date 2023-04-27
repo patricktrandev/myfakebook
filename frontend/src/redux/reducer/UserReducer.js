@@ -13,6 +13,4 @@ const userReducer = (state = initState, action) => {
   }
 };
 
-module.exports = {
-  userReducer,
-};
+export default userReducer;
