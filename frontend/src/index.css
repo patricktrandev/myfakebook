@@ -70,12 +70,16 @@ a {
 .hover2:hover {
   background: var(--bg-third);
 }
+.hover3:hover {
+  background: #d4d6da3a;
+}
 /*-----Hovers-----*/
 .card {
   height: 500px;
   width: 500px;
   background: red;
 }
+
 /*----Scrollbar----*/
 
 .scrollbar::-webkit-scrollbar {
@@ -101,3 +105,10 @@ a {
   cursor: pointer;
 }
 /*---Circles------*/
+
+/*---------text-------*/
+.blue_text {
+  color: var(--blue-color);
+}
+
+/*---------text-------*/

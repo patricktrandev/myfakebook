@@ -20,17 +20,22 @@ import "./header.css";
 import { SearchMenu } from "./SearchMenu";
 import { AllMenu } from "./AllMenu";
 import useClickOutside from "../../helpers/outsideClick";
+import { UserMenu } from "./UserMenu";
 export const Header = () => {
   const { user } = useSelector((user) => ({ ...user }));
   const [showAllMenu, setShowAllMenu] = useState(false);
   const [showSearchMenu, setShowSearchMenu] = useState(false);
+  const [profileMenuClick, setProfileMenuClick] = useState(false);
   const allMenu = useRef(null);
-
+  const usermenu = useRef(null);
   console.log(user);
   const color = "#65676b";
 
   useClickOutside(allMenu, () => {
     setShowAllMenu(false);
+  });
+  useClickOutside(usermenu, () => {
+    setProfileMenuClick(false);
   });
 
   return (
@@ -78,10 +83,6 @@ export const Header = () => {
         </Link>
       </div>
       <div className="header_right">
-        <Link to="/profile" className="profile_link hover1">
-          <img src={user?.picture} alt="" />
-          <span>{user?.first_name}</span>
-        </Link>
         <div
           className="circle_icon hover1"
           ref={allMenu}
@@ -99,8 +100,16 @@ export const Header = () => {
           <Notifications />
           <div className="right_notification">5</div>
         </div>
-        <div className="circle_icon hover1">
-          <ArrowDown />
+        <div className="profile_link" ref={usermenu}>
+          <div
+            onClick={() => {
+              setProfileMenuClick((prev) => !prev);
+            }}
+          >
+            <img src={user?.picture} alt="" />
+          </div>
+
+          {profileMenuClick && <UserMenu user={user} />}
         </div>
       </div>
     </header>

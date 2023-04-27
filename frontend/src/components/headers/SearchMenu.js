@@ -32,6 +32,7 @@ export const SearchMenu = ({ color, setShowSearchMenu }) => {
           </div>
           <input
             type="text"
+            autoFocus
             placeholder="Search Facebook"
             onFocus={() => {
               setIconVisible(false);
