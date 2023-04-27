@@ -13,8 +13,6 @@ import {
   Menu,
   Messenger,
   Notifications,
-  ArrowDown,
-  plusIcon,
 } from "../../svg";
 import "./header.css";
 import { SearchMenu } from "./SearchMenu";
@@ -84,7 +82,7 @@ export const Header = () => {
       </div>
       <div className="header_right">
         <div
-          className="circle_icon hover1"
+          className={`circle_icon hover1 ${showAllMenu ? "active_header" : ""}`}
           ref={allMenu}
           onClick={() => {
             setShowAllMenu((prev) => !prev);
