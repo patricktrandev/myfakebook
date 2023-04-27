@@ -9,9 +9,10 @@ function App() {
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
-        <Route path="/profile" element={<UserProfile />} exact />
         <Route path="/" element={<Home />} exact />
+        <Route path="/profile" element={<UserProfile />} exact />
       </Route>
+
       <Route element={<NotProtectedRoute />}>
         <Route path="/login" element={<Login />} exact />
       </Route>
