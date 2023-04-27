@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -14,15 +14,25 @@ import {
   Messenger,
   Notifications,
   ArrowDown,
+  plusIcon,
 } from "../../svg";
 import "./header.css";
 import { SearchMenu } from "./SearchMenu";
+import { AllMenu } from "./AllMenu";
+import useClickOutside from "../../helpers/outsideClick";
 export const Header = () => {
   const { user } = useSelector((user) => ({ ...user }));
-
+  const [showAllMenu, setShowAllMenu] = useState(false);
   const [showSearchMenu, setShowSearchMenu] = useState(false);
+  const allMenu = useRef(null);
+
   console.log(user);
   const color = "#65676b";
+
+  useClickOutside(allMenu, () => {
+    setShowAllMenu(false);
+  });
+
   return (
     <header>
       <div className="header_left">
@@ -72,8 +82,15 @@ export const Header = () => {
           <img src={user?.picture} alt="" />
           <span>{user?.first_name}</span>
         </Link>
-        <div className="circle_icon hover1">
+        <div
+          className="circle_icon hover1"
+          ref={allMenu}
+          onClick={() => {
+            setShowAllMenu((prev) => !prev);
+          }}
+        >
           <Menu />
+          {showAllMenu && <AllMenu />}
         </div>
         <div className="circle_icon hover1">
           <Messenger />
