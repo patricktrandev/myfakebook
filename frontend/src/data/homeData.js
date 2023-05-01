@@ -118,12 +118,12 @@ export const stories = [
   },
   {
     profile_picture: "../../stories/profile2.jpg",
-    profile_name: "South park",
+    profile_name: "Anh Da Vang",
     image: "../../stories/2.png",
   },
   {
     profile_picture: "../../stories/profile3.png",
-    profile_name: "The Sopranos",
+    profile_name: "Ramesh Java",
     image: "../../stories/3.jpg",
   },
   {
@@ -133,7 +133,7 @@ export const stories = [
   },
   {
     profile_picture: "../../stories/profile5.png",
-    profile_name: "The Witcher Wild Hunt",
+    profile_name: "Vn Express",
     image: "../../stories/5.jfif",
   },
 ];

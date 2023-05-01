@@ -113,6 +113,7 @@ a {
   background: var(--bg-third);
   cursor: pointer;
 }
+
 /*---Circles------*/
 
 /*---------text-------*/
@@ -121,3 +122,14 @@ a {
 }
 
 /*---------text-------*/
+
+/*---------common-------*/
+
+.small_avatar img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  margin-right: 11px;
+  vertical-align: -0.25em;
+}
+/*---------common-------*/
