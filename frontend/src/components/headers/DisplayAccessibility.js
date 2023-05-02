@@ -36,7 +36,11 @@ export const DisplayAccessibility = ({ setVisible }) => {
       </label>
       <div className="mmenu_main">
         <div className="small_circle" style={{ width: "50px" }}>
-          <i className="compact_icon"></i>
+          <img
+            src="/left/compact.png"
+            style={{ width: "30px", height: "30px" }}
+            alt=""
+          />
         </div>
         <div className="mmenu_col">
           <span className="mmenu_span1">Compact mode</span>

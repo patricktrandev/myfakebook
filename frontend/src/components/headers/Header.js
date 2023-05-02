@@ -88,7 +88,10 @@ export const Header = () => {
             setShowAllMenu((prev) => !prev);
           }}
         >
-          <Menu />
+          <div style={{ transform: "translateY(2px)" }}>
+            <Menu />
+          </div>
+
           {showAllMenu && <AllMenu />}
         </div>
         <div className="circle_icon hover1">
