@@ -11,6 +11,13 @@ dotenv.config();
 app.use(express.json());
 app.use(cors());
 
+// app.use(function (err, req, res) {
+//   console.log(err);
+//   res.status(500).send({
+//     message: "Something went wrong!",
+//   });
+// });
+
 app.use("/apifbdocs", swaggerUi.serve);
 app.use("/apifbdocs", swaggerUi.setup(swaggerDocumentation));
 // read all files in route dynamically

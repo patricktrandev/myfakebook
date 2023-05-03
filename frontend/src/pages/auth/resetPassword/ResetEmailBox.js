@@ -11,7 +11,25 @@ export const ResetEmailBox = ({
   loading,
   setLoading,
 }) => {
-  const sendEmail = () => {};
+  console.log(email);
+  const sendEmail = async () => {
+    try {
+      setLoading(true);
+      await axios.post(
+        "http://localhost:8000/api/v1/sendResetCodeVerification",
+        { email }
+      );
+
+      setError("");
+      setVisible(2);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      setError(err.response.data.message);
+    }
+  };
+
+  console.log(userInfo);
   return (
     <div className="reset_form dynamic_height">
       <div className="reset_form_header">Reset Your Password</div>
@@ -31,7 +49,7 @@ export const ResetEmailBox = ({
         <div className="reset_right">
           <img src={userInfo?.picture} alt="" />
           <span>{userInfo?.email}</span>
-          <span>Facebook user</span>
+          {!userInfo && <span>Facebook user</span>}
         </div>
       </div>
       {error && (

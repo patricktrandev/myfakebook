@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { LoginInput } from "../../../components/inputs/loginInput/LoginInput";
+import axios from "axios";
 export const CodeVerificationBox = ({
   code,
   setCode,
@@ -20,7 +21,22 @@ export const CodeVerificationBox = ({
       .max("5", "Code must be 5 characters."),
   });
   const email = userInfo?.email;
-  const verifyCode = async () => {};
+  const verifyCode = async () => {
+    try {
+      setLoading(true);
+      await axios.post("http://localhost:8000/api/v1/validatereset", {
+        email,
+        code,
+      });
+      setLoading(false);
+      setError("");
+      setVisible(3);
+    } catch (err) {
+      setLoading(false);
+      setError(err.response.data.message);
+    }
+  };
+  console.log(email);
   return (
     <div className="reset_form">
       <div className="reset_form_header">Code verification</div>

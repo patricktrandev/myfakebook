@@ -17,7 +17,7 @@ export const ResetPassword = () => {
 
   const [error, setError] = useState("");
   const [codeVerified, setCodeVerified] = useState("");
-  const [visible, setVisible] = useState(3);
+  const [visible, setVisible] = useState(0);
   const [loading, setLoading] = useState(false);
   const handleLogOut = () => {
     Cookies.set("user", "");
@@ -63,14 +63,14 @@ export const ResetPassword = () => {
             setVisible={setVisible}
           />
         )}
-        {visible === 1 && (
+        {visible === 1 && userInfo && (
           <ResetEmailBox
             email={email}
-            userInfos={userInfo}
+            userInfo={userInfo}
             error={error}
             setError={setError}
             setLoading={setLoading}
-            setUserInfos={setUserInfo}
+            setUserInfo={setUserInfo}
             setVisible={setVisible}
           />
         )}
@@ -83,7 +83,7 @@ export const ResetPassword = () => {
             setError={setError}
             setLoading={setLoading}
             setVisible={setVisible}
-            userInfos={userInfo}
+            userInfo={userInfo}
           />
         )}
 
@@ -93,7 +93,7 @@ export const ResetPassword = () => {
             setError={setError}
             setLoading={setLoading}
             setVisible={setVisible}
-            userInfos={userInfo}
+            userInfo={userInfo}
           />
         )}
       </div>

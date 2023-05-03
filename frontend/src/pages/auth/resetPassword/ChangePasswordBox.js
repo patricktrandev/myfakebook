@@ -1,6 +1,7 @@
 import { Formik, Form } from "formik";
+import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { LoginInput } from "../../../components/inputs/loginInput/LoginInput";
 export const ChangePasswordBox = ({
@@ -12,6 +13,7 @@ export const ChangePasswordBox = ({
 }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const validatePassword = Yup.object({
     password: Yup.string()
@@ -26,7 +28,22 @@ export const ChangePasswordBox = ({
       .oneOf([Yup.ref("password")], "Passwords need to be matched."),
   });
   const email = userInfo?.email;
-  const handleChangePassword = () => {};
+  console.log(email, password);
+  const handleChangePassword = async () => {
+    try {
+      setLoading(true);
+      await axios.post("http://localhost:8000/api/v1/changepassword", {
+        email,
+        password,
+      });
+      setLoading(false);
+      setError("");
+      navigate("/login");
+    } catch (err) {
+      setLoading(false);
+      setError(err.response.data.message);
+    }
+  };
   return (
     <div className="reset_form" style={{ height: "310px" }}>
       <div className="reset_form_header">Change Password</div>

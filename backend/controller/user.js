@@ -8,8 +8,14 @@ const {
   validateUserName,
 } = require("../helpers/validation");
 const { generateToken } = require("../helpers/tokens");
-const { sendVerificationEmail } = require("../helpers/mailer");
-const registerAccount = async (req, res) => {
+const {
+  sendVerificationEmail,
+  sendVerificationCodeReset,
+} = require("../helpers/mailer");
+const Code = require("../model/Code");
+const { generateRandomCode } = require("../helpers/otpHelper");
+const catchAsyncError = require("../helpers/catchAsyncError");
+const registerAccount = catchAsyncError(async (req, res, next) => {
   try {
     //validate email
     let {
@@ -24,30 +30,30 @@ const registerAccount = async (req, res) => {
     } = req.body;
 
     if (!validateEmail(email)) {
-      return res.status(404).json({
+      res.status(404).json({
         message: "Invalid email",
       });
     }
     const check = await User.findOne({ email });
     if (check) {
-      return res.status(400).json({
+      res.status(400).json({
         message: "Email already existed. Please try with other email",
       });
     }
     if (!validateLength(first_name, 3, 30)) {
-      return res.status(400).json({
+      res.status(400).json({
         message: "First name must be between 3 and 30 characters",
       });
     }
 
     if (!validateLength(last_name, 3, 30)) {
-      return res.status(400).json({
+      res.status(400).json({
         message: "Last name must be between 3 and 30 characters",
       });
     }
 
     if (!validateLength(password, 6, 60)) {
-      return res.status(400).json({
+      res.status(400).json({
         message: "Password must be at least 6 characters",
       });
     }
@@ -94,12 +100,12 @@ const registerAccount = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      message: err.message,
+      message: `${err.message}`,
     });
   }
-};
+});
 
-const activateAccount = async (req, res) => {
+const activateAccount = catchAsyncError(async (req, res, next) => {
   try {
     const validUser = req.user.id;
 
@@ -108,31 +114,31 @@ const activateAccount = async (req, res) => {
     const check = await User.findById(user.id);
     //console.log(user);
     if (validUser !== user.id) {
-      return res.status(400).json({
+      res.status(400).json({
         message:
           "Invalid credentials. You don't have the authorization to complete this operation.",
       });
     }
 
     if (check.verified) {
-      return res.status(400).json({ message: "Email is already activated" });
+      res.status(400).json({ message: "Email is already activated" });
     } else {
       await User.findByIdAndUpdate(user.id, { verified: "true" });
-      return res.status(200).json({
+      res.status(200).json({
         message: "Account has been activated successfully",
       });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: `${err.message}` });
   }
-};
+});
 
-const login = async (req, res) => {
+const login = catchAsyncError(async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const userFound = await User.findOne({ email: email });
     if (!userFound) {
-      return res
+      res
         .status(400)
         .json({ message: "Email address is not connected to an account" });
     }
@@ -155,45 +161,130 @@ const login = async (req, res) => {
         .json({ message: "Invalid credentials. Please try again" });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: err.message,
+    });
   }
-};
+});
 
-const auth = async (req, res) => {
+const auth = async (req, res, next) => {
   try {
     let userId = req.user.id;
 
     res.json(userId);
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
   console.log("Welcome auth");
 };
 
-const sendVerificationCode = async (req, res) => {
+const sendVerificationCode = catchAsyncError(async (req, res, next) => {
   try {
     const id = req.user.id;
     const user = await User.findById(id);
     if (user.verified === true) {
-      return res.status(400).json({
+      res.status(400).json({
         message: "This account is already activated.",
       });
     }
     const emailVerifiedToken = generateToken({ id: user._id.toString() }, "1d");
     const url = `${process.env.BASE_URL}/activate/${emailVerifiedToken}`;
     sendVerificationEmail(user.email, user.first_name, url);
-    return res.status(200).json({
+    res.status(200).json({
       message: "Verification email sent. Please check your message inbox.",
     });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: err.message,
+    });
   }
-};
+});
 
+const findUser = catchAsyncError(async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const userFound = await User.findOne({ email }).select("-password");
+    //console.log(userFound);
+    if (!userFound) {
+      res.status(400).json({
+        message: "This account does not exist.",
+      });
+    }
+    res.status(200).json({
+      email: userFound.email,
+      picture: userFound.picture,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+const generateCodeResetPassword = catchAsyncError(async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const userFound = await User.findOne({ email }).select("-password");
+
+    await Code.findOneAndRemove({ user: userFound._id });
+    const code = generateRandomCode(5);
+    console.log(code);
+    const savedCode = await new Code({
+      code,
+      user: userFound._id,
+    }).save();
+    sendVerificationCodeReset(userFound.email, userFound.first_name, code);
+
+    res.status(200).json({
+      message: "Email reset code has been sent to you email.",
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+const validateResetCode = catchAsyncError(async (req, res, next) => {
+  try {
+    const { email, code } = req.body;
+    const userFound = await User.findOne({ email });
+    console.log("----" + userFound._id);
+    const codeFound = await Code.findOne({ user: userFound._id });
+    if (codeFound.code != code) {
+      return res.status(400).json({
+        message: "Invalid verification code.",
+      });
+    }
+    res.status(200).json({
+      message: "Operation is complete.",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
+});
+const changePassword = catchAsyncError(async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const cryptedPassword = await bcrypt.hash(password, 15);
+    await User.findOneAndUpdate({ email }, { password: cryptedPassword });
+    return res.status(200).json({
+      message: "ok",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
+});
 module.exports = {
   registerAccount,
   activateAccount,
   login,
   auth,
   sendVerificationCode,
+  findUser,
+  generateCodeResetPassword,
+  validateResetCode,
+  changePassword,
 };

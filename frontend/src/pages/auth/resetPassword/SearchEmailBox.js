@@ -1,4 +1,5 @@
 import React from "react";
+
 import { LoginInput } from "../../../components/inputs/loginInput/LoginInput";
 import * as Yup from "yup";
 import axios from "axios";
@@ -8,7 +9,7 @@ export const SearchEmailBox = ({
   email,
   setEmail,
   setLoading,
-  setUserInfos,
+  setUserInfo,
   setError,
   setVisible,
   error,
@@ -19,7 +20,24 @@ export const SearchEmailBox = ({
       .email("Must be a valid email address.")
       .max(50, "Email address can't be more than 50 characters."),
   });
-  const handleSearch = () => {};
+  const handleSearch = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        "http://localhost:8000/api/v1/finduser",
+        { email }
+      );
+
+      setUserInfo(data);
+      setError("");
+      setLoading(false);
+      //console.log(data);
+      setVisible(1);
+    } catch (err) {
+      setLoading(false);
+      setError(err.response.data.message);
+    }
+  };
   return (
     <div className="reset_form">
       <div className="reset_form_header">Find Your Account</div>
