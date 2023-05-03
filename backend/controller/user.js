@@ -101,10 +101,19 @@ const registerAccount = async (req, res) => {
 
 const activateAccount = async (req, res) => {
   try {
+    const validUser = req.user.id;
+
     const { token } = req.body;
     const user = jwt.verify(token, process.env.TOKEN_SECRET);
-    //console.log(user);
     const check = await User.findById(user.id);
+    //console.log(user);
+    if (validUser !== user.id) {
+      return res.status(400).json({
+        message:
+          "Invalid credentials. You don't have the authorization to complete this operation.",
+      });
+    }
+
     if (check.verified) {
       return res.status(400).json({ message: "Email is already activated" });
     } else {
@@ -149,8 +158,42 @@ const login = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+const auth = async (req, res) => {
+  try {
+    let userId = req.user.id;
+
+    res.json(userId);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  console.log("Welcome auth");
+};
+
+const sendVerificationCode = async (req, res) => {
+  try {
+    const id = req.user.id;
+    const user = await User.findById(id);
+    if (user.verified === true) {
+      return res.status(400).json({
+        message: "This account is already activated.",
+      });
+    }
+    const emailVerifiedToken = generateToken({ id: user._id.toString() }, "1d");
+    const url = `${process.env.BASE_URL}/activate/${emailVerifiedToken}`;
+    sendVerificationEmail(user.email, user.first_name, url);
+    return res.status(200).json({
+      message: "Verification email sent. Please check your message inbox.",
+    });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   registerAccount,
   activateAccount,
   login,
+  auth,
+  sendVerificationCode,
 };

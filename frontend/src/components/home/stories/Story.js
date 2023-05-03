@@ -17,8 +17,8 @@ export const Story = () => {
         </div>
         <div className="story_create_text">Create Story</div>
       </div>
-      {stories.map((item) => {
-        return <StoryItem story={item} />;
+      {stories.map((item, i) => {
+        return <StoryItem key={i} story={item} />;
       })}
       <div className="white_circle">
         <ArrowRight color="#65676b" />
