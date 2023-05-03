@@ -6,6 +6,7 @@ import { Home } from "./pages/Home";
 import ProtectedRoute from "./helpers/ProtectedRoute";
 import NotProtectedRoute from "./helpers/NotProtectedRoute";
 import { Activate } from "./pages/auth/Activate";
+import { ResetPassword } from "./pages/auth/resetPassword/ResetPassword";
 function App() {
   return (
     <Routes>
@@ -17,6 +18,7 @@ function App() {
 
       <Route element={<NotProtectedRoute />}>
         <Route path="/login" element={<Login />} exact />
+        <Route path="/forgot" element={<ResetPassword />} exact />
       </Route>
     </Routes>
   );

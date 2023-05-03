@@ -52,6 +52,29 @@ a {
   gap: 6px;
   cursor: pointer;
 }
+.blue_btn:hover {
+  background-color: #1859ef;
+}
+.gray_btn {
+  border: none;
+  outline: none;
+  background: var(--bg-secondary);
+  padding: 8.5px 12px;
+  border-radius: 7px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.gray_btn:hover {
+  background-color: #42b72a;
+  color: #fff;
+}
 /*----background pop ups----*/
 .blur {
   position: fixed;
