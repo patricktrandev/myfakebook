@@ -7,6 +7,7 @@ import { RightSideMenu } from "../components/home/rightSide/RightSideMenu";
 import { Story } from "../components/home/stories/Story";
 import { NewPost } from "../components/post/NewPost";
 import { EmailVerificationCode } from "../components/login/verifycationCodeEmail/EmailVerificationCode";
+import { PostPopsUp } from "../components/post/PostPopsUp";
 
 export const Home = () => {
   const { user } = useSelector((user) => ({ ...user }));
@@ -14,6 +15,8 @@ export const Home = () => {
     <div className="home">
       <Header />
       <div className="home_middle">
+        <PostPopsUp user={user} />
+
         <Story />
         {!user.verified && <EmailVerificationCode user={user} />}
 
