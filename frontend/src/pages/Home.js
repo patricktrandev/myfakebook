@@ -9,19 +9,17 @@ import { NewPost } from "../components/post/NewPost";
 import { EmailVerificationCode } from "../components/login/verifycationCodeEmail/EmailVerificationCode";
 import { PostPopsUp } from "../components/post/PostPopsUp";
 
-export const Home = () => {
+export const Home = ({ setCreatePostVisible }) => {
   const { user } = useSelector((user) => ({ ...user }));
   const [visible, setVisible] = useState(true);
   return (
     <div className="home">
       <Header />
       <div className="home_middle">
-        <PostPopsUp user={user} setVisible={setVisible} />
-
         <Story />
         {!user.verified && <EmailVerificationCode user={user} />}
 
-        <NewPost user={user} />
+        <NewPost user={user} setCreatePostVisible={setCreatePostVisible} />
       </div>
       <LeftSideMenu user={user} />
       <RightSideMenu user={user} />

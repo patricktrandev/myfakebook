@@ -10,7 +10,7 @@ const uploadImgae = async (req, res) => {
     console.log(process.env.CLOUD_KEY);
     const { path } = req.body;
     let files = Object.values(req.files).flat();
-    console.log("13", files);
+    //console.log("13", files);
     let images = [];
     for (const file of files) {
       console.log("16", file.tempFilePath);

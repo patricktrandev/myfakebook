@@ -403,3 +403,12 @@
   width: 75%;
   font-weight: 600;
 }
+
+@keyframes anim {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}

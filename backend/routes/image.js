@@ -6,6 +6,6 @@ const { uploadImgae } = require("../controller/imageUpload");
 const router = express.Router();
 
 //register
-router.post("/uploadImages", imageUpload, uploadImgae);
+router.post("/uploadImages", authUser, imageUpload, uploadImgae);
 
 module.exports = router;
