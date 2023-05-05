@@ -4,12 +4,12 @@ import "./postpopup.css";
 import { LiveVideo, Photo, Feeling } from "../../svg";
 import { EmojiPickerBox } from "./EmojiPickerBox";
 import { AddToYourPost } from "./AddToYourPost";
+import { ImagePreview } from "./ImagePreview";
 export const PostPopsUp = ({ user }) => {
   const [text, setText] = useState("");
-  const [showPrev, setShowPrev] = useState(false);
-  const [picker, setPicker] = useState(false);
-  const textRef = useRef(null);
+  const [showPrev, setShowPrev] = useState(true);
 
+  const [images, setImages] = useState([]);
   return (
     <div className="blur">
       <div className="postBox">
@@ -32,37 +32,20 @@ export const PostPopsUp = ({ user }) => {
             </div>
           </div>
         </div>
-        <textarea
-          ref={textRef}
-          className="post_input"
-          maxLength="100"
-          value={text}
-          placeholder={`What's on your mind? ${user?.first_name} `}
-          onChange={(e) => {
-            setText(e.target.value);
-          }}
-        />
-        {showPrev && (
-          <div className="flex_center">
-            <textarea
-              className="post_input"
-              maxLength="100"
-              value={text}
-              placeholder={`What's on your mind? ${user.first_name} `}
-              onChange={(e) => {
-                setText(e.target.value);
-              }}
-            />
-          </div>
-        )}
 
-        <EmojiPickerBox
-          picker={picker}
-          setPicker={setPicker}
-          textRef={textRef}
-          text={text}
-          setText={setText}
-        />
+        {showPrev ? (
+          <ImagePreview
+            text={text}
+            user={user}
+            setText={setText}
+            showPrev={showPrev}
+            images={images}
+            setImages={setImages}
+            setShowPrev={setShowPrev}
+          />
+        ) : (
+          <EmojiPickerBox user={user} text={text} setText={setText} />
+        )}
 
         <AddToYourPost />
         <button className="post_submit">Post</button>
