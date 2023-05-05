@@ -7,12 +7,15 @@ cloudinary.config({
 });
 const uploadImgae = async (req, res) => {
   try {
-    console.log(api_key);
+    console.log(process.env.CLOUD_KEY);
     const { path } = req.body;
     let files = Object.values(req.files).flat();
+    console.log("13", files);
     let images = [];
     for (const file of files) {
+      console.log("16", file.tempFilePath);
       const url = await uploadToCloudinary(file, path);
+      console.log(url);
       images.push(url);
       removeTmp(file.tempFilePath);
     }
@@ -24,7 +27,7 @@ const uploadImgae = async (req, res) => {
 
 const uploadToCloudinary = async (file, path) => {
   return new Promise((resolve) => {
-    cloudinary.v2.uploader.upload(
+    cloudinary.uploader.upload(
       file.tempFilePath,
       {
         folder: path,

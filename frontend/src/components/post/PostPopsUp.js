@@ -5,13 +5,19 @@ import { LiveVideo, Photo, Feeling } from "../../svg";
 import { EmojiPickerBox } from "./EmojiPickerBox";
 import { AddToYourPost } from "./AddToYourPost";
 import { ImagePreview } from "./ImagePreview";
-export const PostPopsUp = ({ user }) => {
+import useClickOutside from "../../helpers/outsideClick";
+export const PostPopsUp = ({ user, setVisible }) => {
   const [text, setText] = useState("");
-  const [showPrev, setShowPrev] = useState(true);
+  const popup = useRef();
+  const [showPrev, setShowPrev] = useState(false);
 
   const [images, setImages] = useState([]);
+  const [background, setBackground] = useState(false);
+  useClickOutside(popup, () => {
+    setVisible(false);
+  });
   return (
-    <div className="blur">
+    <div className="blur" ref={popup}>
       <div className="postBox">
         <div className="box_header">
           <div className="small_circle">
@@ -44,7 +50,13 @@ export const PostPopsUp = ({ user }) => {
             setShowPrev={setShowPrev}
           />
         ) : (
-          <EmojiPickerBox user={user} text={text} setText={setText} />
+          <EmojiPickerBox
+            user={user}
+            text={text}
+            setText={setText}
+            setBackground={setBackground}
+            background={background}
+          />
         )}
 
         <AddToYourPost setShowPrev={setShowPrev} />

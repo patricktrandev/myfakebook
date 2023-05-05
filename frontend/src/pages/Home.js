@@ -11,11 +11,12 @@ import { PostPopsUp } from "../components/post/PostPopsUp";
 
 export const Home = () => {
   const { user } = useSelector((user) => ({ ...user }));
+  const [visible, setVisible] = useState(true);
   return (
     <div className="home">
       <Header />
       <div className="home_middle">
-        <PostPopsUp user={user} />
+        <PostPopsUp user={user} setVisible={setVisible} />
 
         <Story />
         {!user.verified && <EmailVerificationCode user={user} />}
