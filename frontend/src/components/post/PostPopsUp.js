@@ -47,7 +47,7 @@ export const PostPopsUp = ({ user }) => {
           <EmojiPickerBox user={user} text={text} setText={setText} />
         )}
 
-        <AddToYourPost />
+        <AddToYourPost setShowPrev={setShowPrev} />
         <button className="post_submit">Post</button>
       </div>
     </div>
