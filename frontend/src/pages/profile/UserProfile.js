@@ -6,6 +6,9 @@ import { useSelector } from "react-redux";
 import { profileReducer } from "../../redux/reducer/ProfileReducer";
 import { Header } from "../../components/headers/Header";
 import { CoverProfile } from "./CoverProfile";
+import { ProfilePicture } from "./ProfilePicture";
+import { ProfileMenu } from "./ProfileMenu";
+import { PeopleYouMayKnow } from "./PeopleYouMayKnow";
 export const UserProfile = () => {
   const { username } = useParams();
   const navigate = useNavigate();
@@ -57,6 +60,15 @@ export const UserProfile = () => {
       <div className="profile_top">
         <div className="profile_container">
           <CoverProfile user={user} visitor={visitor} />
+          <ProfilePicture profile={profile} visitor={visitor} />
+          <ProfileMenu />
+        </div>
+      </div>
+      <div className="profile_bottom">
+        <div className="profile_container">
+          <div className="bottom_container">
+            <PeopleYouMayKnow />
+          </div>
         </div>
       </div>
     </div>
