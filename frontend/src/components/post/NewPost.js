@@ -1,7 +1,7 @@
 import React from "react";
 import "./newpost.css";
 import { LiveVideo, Photo, Feeling } from "../../svg";
-export const NewPost = ({ user, setCreatePostVisible }) => {
+export const NewPost = ({ user, setCreatePostVisible, profile }) => {
   return (
     <div className="createPost">
       <div className="createPost_header">
@@ -25,10 +25,17 @@ export const NewPost = ({ user, setCreatePostVisible }) => {
           <Photo color="#4bbf67" />
           Photo/Video
         </div>
-        <div className="createPost_icon hover1">
-          <Feeling color="#f7b928" />
-          Feeling/Activity
-        </div>
+        {profile ? (
+          <div className="createPost_icon hover1">
+            <i className="lifeEvent_icon"></i>
+            Life Event
+          </div>
+        ) : (
+          <div className="createPost_icon hover1">
+            <Feeling color="#f7b928" />
+            Feeling/Activity
+          </div>
+        )}
       </div>
     </div>
   );

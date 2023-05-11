@@ -15,9 +15,8 @@ import { useEffect, useReducer, useState } from "react";
 import { postsReducer } from "./redux/reducer/PostReducer";
 
 function App() {
-  const [visible, setVisible] = useState(false);
   const { user } = useSelector((user) => ({ ...user }));
-
+  const [createPostVisible, setCreatePostVisible] = useState(false);
   const [{ loading, error, posts }, dispatch] = useReducer(postsReducer, {
     loading: false,
     posts: [],
@@ -52,8 +51,8 @@ function App() {
     }
   };
 
-  const [createPostVisible, setCreatePostVisible] = useState(false);
   console.log(posts);
+
   return (
     <div>
       {createPostVisible && (
@@ -63,15 +62,28 @@ function App() {
       <Routes>
         <Route element={<ProtectedRoute />}>
           <Route
+            path="/profile"
+            element={
+              <UserProfile setCreatePostVisible={setCreatePostVisible} />
+            }
+            exact
+          />
+          <Route
+            path="/profile/:username"
+            element={
+              <UserProfile setCreatePostVisible={setCreatePostVisible} />
+            }
+            exact
+          />
+          <Route
             path="/"
             element={
               <Home setCreatePostVisible={setCreatePostVisible} posts={posts} />
             }
             exact
           />
-          <Route path="/profile" element={<UserProfile />} exact />
+
           <Route path="/activate/:token" element={<Activate />} exact />
-          <Route path="/profile/:username" element={<UserProfile />} exact />
         </Route>
 
         <Route element={<NotProtectedRoute />}>

@@ -9,7 +9,10 @@ import { CoverProfile } from "./CoverProfile";
 import { ProfilePicture } from "./ProfilePicture";
 import { ProfileMenu } from "./ProfileMenu";
 import { PeopleYouMayKnow } from "./PeopleYouMayKnow";
-export const UserProfile = () => {
+import { GridPost } from "./GridPost";
+import { NewPost } from "../../components/post/NewPost";
+import { PostsViews } from "../../components/post/postViewsUser/PostsViews";
+export const UserProfile = ({ setCreatePostVisible }) => {
   const { username } = useParams();
   const navigate = useNavigate();
   const { user } = useSelector((state) => ({ ...state }));
@@ -54,6 +57,7 @@ export const UserProfile = () => {
     }
   };
   console.log(profile);
+  //console.log(setCreatePostVisible);
   return (
     <div className="profile">
       <Header page="profile" />
@@ -68,6 +72,27 @@ export const UserProfile = () => {
         <div className="profile_container">
           <div className="bottom_container">
             <PeopleYouMayKnow />
+            <div className="profile_grid">
+              <div className="profile_left"></div>
+              <div className="profile_right">
+                {!visitor && (
+                  <NewPost
+                    user={user}
+                    setCreatePostVisible={setCreatePostVisible}
+                  />
+                )}
+                <GridPost />
+                <div className="posts">
+                  {profile.posts && profile.posts.length ? (
+                    profile.posts.map((post) => (
+                      <PostsViews post={post} user={user} key={post._id} />
+                    ))
+                  ) : (
+                    <div className="no_posts">No posts available</div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
