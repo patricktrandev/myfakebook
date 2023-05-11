@@ -1,22 +1,33 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import { UpdateProfilePicture } from "./updateProfile/UpdateProfilePicture";
+import useClickOutside from "../../helpers/outsideClick";
 
 export const ProfilePicture = ({ profile, visitor }) => {
+  const [show, setShow] = useState(false);
+  const pRef = useRef(null);
   let img = profile?.picture;
   let firstName = profile?.first_name;
   let lastName = profile?.last_name;
+
   return (
     <div className="profile_img_wrap">
+      {show && <UpdateProfilePicture pRef={pRef} setShow={setShow} />}
+
       <div className="profile_w_left">
         <div className="profile_w_img">
           <div
             className="profile_w_bg"
+            ref={pRef}
             style={{
               backgroundSize: "cover",
               backgroundImage: `url(${img})`,
             }}
           ></div>
           {!visitor && (
-            <div className="profile_circle hover1">
+            <div
+              className="profile_circle hover1"
+              onClick={() => setShow(true)}
+            >
               <i className="camera_filled_icon"></i>
             </div>
           )}
