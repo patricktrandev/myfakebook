@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { Login } from "./pages/auth/Login";
 
 import { Routes, Route } from "react-router-dom";
@@ -9,11 +11,65 @@ import { Activate } from "./pages/auth/Activate";
 import { ResetPassword } from "./pages/auth/resetPassword/ResetPassword";
 import { PostPopsUp } from "./components/post/PostPopsUp";
 import { useSelector } from "react-redux";
-import { useState } from "react";
-function App() {
-  const { user } = useSelector((user) => ({ ...user }));
-  const [createPostVisible, setCreatePostVisible] = useState(false);
+import { useEffect, useReducer, useState } from "react";
+function reducer(state, action) {
+  switch (action.type) {
+    case "POSTS_REQUEST":
+      return { ...state, loading: true, error: "" };
+    case "POSTS_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        posts: action.payload,
+        error: "",
+      };
+    case "POSTS_ERROR":
+      return { ...state, loading: false, error: action.payload };
 
+    default:
+      return state;
+  }
+}
+function App() {
+  const [visible, setVisible] = useState(false);
+  const { user } = useSelector((user) => ({ ...user }));
+
+  const [{ loading, error, posts }, dispatch] = useReducer(reducer, {
+    loading: false,
+    posts: [],
+    error: "",
+  });
+  console.log(posts);
+  useEffect(() => {
+    getAllPosts();
+  }, []);
+  const getAllPosts = async () => {
+    try {
+      dispatch({
+        type: "POSTS_REQUEST",
+      });
+      const { data } = await axios.get(
+        "http://localhost:8000/api/v1/getAllPosts",
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      dispatch({
+        type: "POSTS_SUCCESS",
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: "POSTS_ERROR",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+  const [createPostVisible, setCreatePostVisible] = useState(false);
+  console.log(posts);
   return (
     <div>
       {createPostVisible && (
@@ -24,7 +80,9 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route
             path="/"
-            element={<Home setCreatePostVisible={setCreatePostVisible} />}
+            element={
+              <Home setCreatePostVisible={setCreatePostVisible} posts={posts} />
+            }
             exact
           />
           <Route path="/profile" element={<UserProfile />} exact />
