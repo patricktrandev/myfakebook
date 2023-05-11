@@ -52,7 +52,7 @@ export const PostPopsUp = ({ user, setCreatePostVisible }) => {
         return dataURItoBlob(img);
       });
       console.log(postImages);
-      const path = `${user.username}/post Images`;
+      const path = `${user.username}/post_Images`;
       let formData = new FormData();
       formData.append("path", path);
       postImages.forEach((image) => {
@@ -131,27 +131,29 @@ export const PostPopsUp = ({ user, setCreatePostVisible }) => {
             </div>
           </div>
         </div>
-
-        {showPrev ? (
-          <ImagePreview
-            text={text}
-            user={user}
-            setText={setText}
-            showPrev={showPrev}
-            images={images}
-            setImages={setImages}
-            setShowPrev={setShowPrev}
-            setError={setError}
-          />
-        ) : (
-          <EmojiPickerBox
-            user={user}
-            text={text}
-            setText={setText}
-            setBackground={setBackground}
-            background={background}
-          />
-        )}
+        <></>
+        <>
+          {showPrev ? (
+            <ImagePreview
+              text={text}
+              user={user}
+              setText={setText}
+              showPrev={showPrev}
+              images={images}
+              setImages={setImages}
+              setShowPrev={setShowPrev}
+              setError={setError}
+            />
+          ) : (
+            <EmojiPickerBox
+              user={user}
+              text={text}
+              setText={setText}
+              setBackground={setBackground}
+              background={background}
+            />
+          )}
+        </>
 
         <AddToYourPost setShowPrev={setShowPrev} />
         <button className="post_submit" onClick={postSubmit} disabled={loading}>

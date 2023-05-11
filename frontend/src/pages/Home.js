@@ -19,9 +19,10 @@ export const Home = ({ setCreatePostVisible, posts }) => {
   useEffect(() => {
     setHeight(middle.current.clientHeight);
   }, [posts]);
+  console.log(user);
   return (
     <div className="home" style={{ height: `${height + 150}px` }}>
-      <Header />
+      <Header page={"home"} />
       <div className="home_middle" ref={middle}>
         <Story />
         {!user.verified && <EmailVerificationCode user={user} />}

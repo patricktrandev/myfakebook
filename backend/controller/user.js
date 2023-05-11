@@ -277,6 +277,24 @@ const changePassword = catchAsyncError(async (req, res, next) => {
     });
   }
 });
+
+//*******************PROFILE ****************************//
+const getProfile = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const profile = await User.findOne({ username }).select("-password");
+    res.json(profile);
+    if (!profile) {
+      return res.json({ ok: false });
+    }
+
+    // const posts = await Post.find({ user: profile._id }).populate("user");
+    // res.json({ ...profile.toObject(), posts });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   registerAccount,
   activateAccount,
@@ -287,4 +305,5 @@ module.exports = {
   generateCodeResetPassword,
   validateResetCode,
   changePassword,
+  getProfile,
 };

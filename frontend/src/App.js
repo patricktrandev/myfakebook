@@ -12,29 +12,13 @@ import { ResetPassword } from "./pages/auth/resetPassword/ResetPassword";
 import { PostPopsUp } from "./components/post/PostPopsUp";
 import { useSelector } from "react-redux";
 import { useEffect, useReducer, useState } from "react";
-function reducer(state, action) {
-  switch (action.type) {
-    case "POSTS_REQUEST":
-      return { ...state, loading: true, error: "" };
-    case "POSTS_SUCCESS":
-      return {
-        ...state,
-        loading: false,
-        posts: action.payload,
-        error: "",
-      };
-    case "POSTS_ERROR":
-      return { ...state, loading: false, error: action.payload };
+import { postsReducer } from "./redux/reducer/PostReducer";
 
-    default:
-      return state;
-  }
-}
 function App() {
   const [visible, setVisible] = useState(false);
   const { user } = useSelector((user) => ({ ...user }));
 
-  const [{ loading, error, posts }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, posts }, dispatch] = useReducer(postsReducer, {
     loading: false,
     posts: [],
     error: "",
@@ -87,6 +71,7 @@ function App() {
           />
           <Route path="/profile" element={<UserProfile />} exact />
           <Route path="/activate/:token" element={<Activate />} exact />
+          <Route path="/profile/:username" element={<UserProfile />} exact />
         </Route>
 
         <Route element={<NotProtectedRoute />}>
