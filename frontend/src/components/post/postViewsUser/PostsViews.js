@@ -6,12 +6,12 @@ import { Public, Dots } from "../../../svg";
 import { ReactPopUp } from "./ReactPopUp";
 import { CommentViews } from "./CommentViews";
 import { PostViewMenu } from "./PostViewMenu";
-export const PostsViews = ({ post, user }) => {
+export const PostsViews = ({ post, user, profile }) => {
   const [visible, setVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <div className="post">
+    <div className="post" style={{ width: `${profile && "100%"}` }}>
       <div className="post_header">
         <Link
           to={`/profile/${post.user.username}`}

@@ -289,7 +289,9 @@ const getProfile = async (req, res) => {
       return res.json({ ok: false });
     }
 
-    const posts = await Post.find({ user: profile._id }).populate("user");
+    const posts = await Post.find({ user: profile._id })
+      .populate("user")
+      .sort({ createdAt: "desc" });
     res.json({ ...profile.toObject(), posts });
   } catch (error) {
     res.status(500).json({ message: error.message });

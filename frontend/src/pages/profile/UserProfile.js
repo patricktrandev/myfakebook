@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import axios from "axios";
 import "./UserProfile.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { profileReducer } from "../../redux/reducer/ProfileReducer";
 import { Header } from "../../components/headers/Header";
@@ -12,6 +12,8 @@ import { PeopleYouMayKnow } from "./PeopleYouMayKnow";
 import { GridPost } from "./GridPost";
 import { NewPost } from "../../components/post/NewPost";
 import { PostsViews } from "../../components/post/postViewsUser/PostsViews";
+import { Photos } from "./Photos";
+import { Friends } from "./Friends";
 export const UserProfile = ({ setCreatePostVisible }) => {
   const { username } = useParams();
   const navigate = useNavigate();
@@ -57,7 +59,7 @@ export const UserProfile = ({ setCreatePostVisible }) => {
     }
   };
   console.log(profile);
-  //console.log(setCreatePostVisible);
+
   return (
     <div className="profile">
       <Header page="profile" />
@@ -73,7 +75,26 @@ export const UserProfile = ({ setCreatePostVisible }) => {
           <div className="bottom_container">
             <PeopleYouMayKnow />
             <div className="profile_grid">
-              <div className="profile_left"></div>
+              <div className="profile_left">
+                <Photos username={userName} token={user.token} />
+                <Friends />
+                <div className="relative_fb_copyright">
+                  <Link to="/">Privacy </Link>
+                  <span>. </span>
+                  <Link to="/">Terms </Link>
+                  <span>. </span>
+                  <Link to="/">Advertising </Link>
+                  <span>. </span>
+                  <Link to="/">
+                    Ad Choices <i className="ad_choices_icon"></i>{" "}
+                  </Link>
+                  <span>. </span>
+                  <Link to="/"></Link>Cookies <span>. </span>
+                  <Link to="/">More </Link>
+                  <span>. </span> <br />
+                  Meta © 2023
+                </div>
+              </div>
               <div className="profile_right">
                 {!visitor && (
                   <NewPost
@@ -85,7 +106,12 @@ export const UserProfile = ({ setCreatePostVisible }) => {
                 <div className="posts">
                   {profile.posts && profile.posts.length ? (
                     profile.posts.map((post) => (
-                      <PostsViews post={post} user={user} key={post._id} />
+                      <PostsViews
+                        post={post}
+                        user={user}
+                        key={post._id}
+                        profile
+                      />
                     ))
                   ) : (
                     <div className="no_posts">No posts available</div>

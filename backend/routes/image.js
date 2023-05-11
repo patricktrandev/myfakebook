@@ -7,5 +7,5 @@ const router = express.Router();
 
 //register
 router.post("/uploadImages", authUser, imageUpload, uploadImgae);
-router.get("/listImages", listImages);
+router.post("/listImages", authUser, listImages);
 module.exports = router;
