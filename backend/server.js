@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const swaggerUi = require("swagger-ui-express");
+const fileUpload = require("express-fileupload");
 const app = express();
 dotenv.config({ path: "config/config.env" });
 const { readdirSync } = require("fs");
@@ -10,6 +11,13 @@ const swaggerDocumentation = require("./helpers/documentation");
 dotenv.config();
 app.use(express.json());
 app.use(cors());
+
+//upload image
+app.use(
+  fileUpload({
+    useTempFiles: true,
+  })
+);
 
 // app.use(function (err, req, res) {
 //   console.log(err);

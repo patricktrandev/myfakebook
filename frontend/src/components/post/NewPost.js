@@ -1,12 +1,17 @@
 import React from "react";
 import "./newpost.css";
 import { LiveVideo, Photo, Feeling } from "../../svg";
-export const NewPost = ({ user }) => {
+export const NewPost = ({ user, setCreatePostVisible }) => {
   return (
     <div className="createPost">
       <div className="createPost_header">
         <img src={user?.picture} alt="" />
-        <div className="open_post hover2">
+        <div
+          className="open_post hover2"
+          onClick={() => {
+            setCreatePostVisible(true);
+          }}
+        >
           Hey {user?.first_name}, what's on your mind?
         </div>
       </div>
