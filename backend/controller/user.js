@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../model/users");
+const Post = require("../model/Post");
 
 const {
   validateEmail,
@@ -277,6 +278,67 @@ const changePassword = catchAsyncError(async (req, res, next) => {
     });
   }
 });
+
+//*******************PROFILE ****************************//
+const getProfile = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const profile = await User.findOne({ username }).select("-password");
+    //res.json(profile);
+    if (!profile) {
+      return res.json({ ok: false });
+    }
+
+    const posts = await Post.find({ user: profile._id })
+      .populate("user")
+      .sort({ createdAt: "desc" });
+    res.json({ ...profile.toObject(), posts });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+const updateProfilePicture = async (req, res) => {
+  try {
+    const { url } = req.body;
+
+    await User.findByIdAndUpdate(req.user.id, {
+      picture: url,
+    });
+    res.json(url);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+const updateCover = async (req, res) => {
+  try {
+    const { url } = req.body;
+
+    await User.findByIdAndUpdate(req.user.id, {
+      cover: url,
+    });
+    res.json(url);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateDetails = async (req, res) => {
+  try {
+    const { infos } = req.body;
+    const updated = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        details: infos,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(updated.details);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   registerAccount,
   activateAccount,
@@ -287,4 +349,8 @@ module.exports = {
   generateCodeResetPassword,
   validateResetCode,
   changePassword,
+  getProfile,
+  updateProfilePicture,
+  updateCover,
+  updateDetails,
 };

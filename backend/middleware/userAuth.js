@@ -12,6 +12,7 @@ const authUser = (req, res, next) => {
       }
       req.user = user;
     });
+    console.log("next auth user");
     next();
   } catch (err) {
     return res.status(500).json({ message: err.message });

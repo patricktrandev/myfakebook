@@ -19,7 +19,7 @@ import { SearchMenu } from "./SearchMenu";
 import { AllMenu } from "./AllMenu";
 import useClickOutside from "../../helpers/outsideClick";
 import { UserMenu } from "./UserMenu";
-export const Header = () => {
+export const Header = ({ page }) => {
   const { user } = useSelector((user) => ({ ...user }));
   const [showAllMenu, setShowAllMenu] = useState(false);
   const [showSearchMenu, setShowSearchMenu] = useState(false);
@@ -63,8 +63,11 @@ export const Header = () => {
       )}
 
       <div className="header_middle">
-        <Link to="/" className="middle_icon active">
-          <HomeActive />
+        <Link
+          to="/"
+          className={`middle_icon ${page === "home" ? "active" : "hover 1"}`}
+        >
+          {page === "home" ? <HomeActive /> : <Home color={color} />}
         </Link>
         <Link to="/" className="middle_icon hover1">
           <Friends color={color} />

@@ -1,37 +1,38 @@
 import axios from "axios";
-import {
-  CLEAR_ERROR,
-  REGISTER_FAIL,
-  REGISTER_REQUEST,
-  REGISTER_SUCCESS,
-} from "../constant/userConstant";
 
-export const registerAction = (userData) => async (dispatch) => {
+export const updateprofilePictureAction = async (url, token) => {
   try {
-    dispatch({
-      type: REGISTER_REQUEST,
-    });
-    console.log(userData);
-    console.log("register call");
-    const { data } = await axios.post(
-      "http://localhost:8000/api/v1/register",
-      userData
+    const { data } = await axios.put(
+      "http://localhost:8000/api/v1/updateProfilePicture",
+      {
+        url,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
-    dispatch({
-      type: REGISTER_SUCCESS,
-      payload: data,
-    });
-    console.log("gett data", data);
-  } catch (err) {
-    dispatch({
-      type: REGISTER_FAIL,
-      payload: err.response?.data.message,
-    });
+    return "ok";
+  } catch (error) {
+    return error.response.data.message;
   }
 };
-
-export const clearErrors = () => async (dispatch) => {
-  dispatch({
-    type: CLEAR_ERROR,
-  });
+export const updateCoverPictureAction = async (url, token) => {
+  try {
+    const { data } = await axios.put(
+      "http://localhost:8000/api/v1/updateCover",
+      {
+        url,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return "ok";
+  } catch (error) {
+    return error.response.data.message;
+  }
 };
