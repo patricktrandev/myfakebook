@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { UpdateProfilePicture } from "./updateProfile/UpdateProfilePicture";
 import useClickOutside from "../../helpers/outsideClick";
+import { Friendship } from "./friendship/Friendship";
+import { Link } from "react-router-dom";
 
 export const ProfilePicture = ({ profile, visitor, photos, otherName }) => {
   const [show, setShow] = useState(false);
@@ -39,14 +41,39 @@ export const ProfilePicture = ({ profile, visitor, photos, otherName }) => {
         <div className="profile_w_col">
           <div className="profile_name">
             {firstName} {lastName}
-            <div className="othername">{`(${otherName})`}</div>
+            <div className="othername">{otherName && `(${otherName})`}</div>
           </div>
-          <div className="profile_friend_count"></div>
-          <div className="profile_friend_imgs"></div>
+          <div className="profile_friend_count">
+            {profile?.friends && (
+              <div className="profile_card_count">
+                {profile?.friends.length === 0
+                  ? ""
+                  : profile?.friends.length === 1
+                  ? "1 Friend"
+                  : `${profile?.friends.length} Friends`}
+              </div>
+            )}
+          </div>
+
+          <div className="profile_friend_imgs">
+            {profile?.friends &&
+              profile.friends.slice(0, 6).map((friend, i) => (
+                <Link to={`/profile/${friend.username}`} key={i}>
+                  <img
+                    src={friend.picture}
+                    alt=""
+                    style={{
+                      transform: `translateX(${-i * 7}px)`,
+                      zIndex: `${i}`,
+                    }}
+                  />
+                </Link>
+              ))}
+          </div>
         </div>
       </div>
       {visitor ? (
-        ""
+        <Friendship friendshipp={profile?.friendship} profileId={profile._id} />
       ) : (
         <div className="profile_w_right">
           <div className="blue_btn">

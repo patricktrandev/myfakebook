@@ -286,6 +286,7 @@ const getProfile = async (req, res) => {
     const user = await User.findById(req.user.id);
 
     const profile = await User.findOne({ username }).select("-password");
+
     //res.json(profile);
     const friendship = {
       friends: false,
@@ -314,6 +315,7 @@ const getProfile = async (req, res) => {
     const posts = await Post.find({ user: profile._id })
       .populate("user")
       .sort({ createdAt: "desc" });
+    await profile.populate("friends", "first_name last_name username picture");
     res.json({ ...profile.toObject(), posts, friendship });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -484,10 +486,10 @@ const acceptRequest = async (req, res) => {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
       if (receiver.requests.includes(sender._id)) {
-        await receiver.update({
+        await receiver.updateOne({
           $push: { friends: sender._id, following: sender._id },
         });
-        await sender.update({
+        await sender.updateOne({
           $push: { friends: receiver._id, followers: receiver._id },
         });
         await receiver.updateOne({
@@ -515,14 +517,14 @@ const unfriend = async (req, res) => {
         receiver.friends.includes(sender._id) &&
         sender.friends.includes(receiver._id)
       ) {
-        await receiver.update({
+        await receiver.updateOne({
           $pull: {
             friends: sender._id,
             following: sender._id,
             followers: sender._id,
           },
         });
-        await sender.update({
+        await sender.updateOne({
           $pull: {
             friends: receiver._id,
             following: receiver._id,
@@ -547,13 +549,13 @@ const deleteRequest = async (req, res) => {
       const receiver = await User.findById(req.user.id);
       const sender = await User.findById(req.params.id);
       if (receiver.requests.includes(sender._id)) {
-        await receiver.update({
+        await receiver.updateOne({
           $pull: {
             requests: sender._id,
             followers: sender._id,
           },
         });
-        await sender.update({
+        await sender.updateOne({
           $pull: {
             following: receiver._id,
           },

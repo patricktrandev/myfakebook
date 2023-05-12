@@ -1,6 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const Friends = ({ friends }) => {
+  console.log(friends);
   return (
     <div className="profile_card">
       <div className="profile_card_header">
@@ -18,9 +20,18 @@ export const Friends = ({ friends }) => {
       )}
       <div className="profile_card_grid">
         {friends &&
-          friends
-            .slice(0, 9)
-            .map((friend) => <div className="profile_photo_card"></div>)}
+          friends.slice(0, 9).map((friend, i) => (
+            <Link
+              to={`/profile/${friend.username}`}
+              key={i}
+              className="profile_photo_card"
+            >
+              <img src={friend.picture} alt="" />
+              <span>
+                {friend.first_name} {friend.last_name}
+              </span>
+            </Link>
+          ))}
       </div>
     </div>
   );

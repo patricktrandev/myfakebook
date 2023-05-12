@@ -71,32 +71,32 @@ const userSchema = new Schema(
     friends: [
       {
         type: ObjectId,
-        ref: "User",
+        ref: "users",
       },
     ],
     following: [
       {
         type: ObjectId,
-        ref: "User",
+        ref: "users",
       },
     ],
     followers: [
       {
         type: ObjectId,
-        ref: "User",
+        ref: "users",
       },
     ],
     requests: [
       {
         type: ObjectId,
-        ref: "User",
+        ref: "users",
       },
     ],
     search: [
       {
         user: {
           type: ObjectId,
-          ref: "User",
+          ref: "users",
         },
       },
     ],

@@ -117,7 +117,7 @@ export const UserProfile = ({ setCreatePostVisible }) => {
                   setOthername={setOthername}
                 />
                 <Photos photos={photos} />
-                <Friends />
+                <Friends friends={profile.friends} />
                 <div className="relative_fb_copyright">
                   <Link to="/">Privacy </Link>
                   <span>. </span>
