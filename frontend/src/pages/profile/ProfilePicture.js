@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { UpdateProfilePicture } from "./updateProfile/UpdateProfilePicture";
 import useClickOutside from "../../helpers/outsideClick";
 
-export const ProfilePicture = ({ profile, visitor }) => {
+export const ProfilePicture = ({ profile, visitor, photos }) => {
   const [show, setShow] = useState(false);
   const pRef = useRef(null);
   let img = profile?.picture;
@@ -11,7 +11,9 @@ export const ProfilePicture = ({ profile, visitor }) => {
 
   return (
     <div className="profile_img_wrap">
-      {show && <UpdateProfilePicture pRef={pRef} setShow={setShow} />}
+      {show && (
+        <UpdateProfilePicture pRef={pRef} setShow={setShow} photos={photos} />
+      )}
 
       <div className="profile_w_left">
         <div className="profile_w_img">

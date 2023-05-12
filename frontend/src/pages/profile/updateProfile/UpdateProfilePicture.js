@@ -4,7 +4,8 @@ import "./updateProfilePicture.css";
 
 import { ProfileUpdateView } from "./ProfileUpdateView";
 import useClickOutside from "../../../helpers/outsideClick";
-export const UpdateProfilePicture = ({ setShow, pRef }) => {
+import { useSelector } from "react-redux";
+export const UpdateProfilePicture = ({ setShow, pRef, photos }) => {
   const popup = useRef(null);
   useClickOutside(popup, () => {
     setShow(false);
@@ -12,6 +13,7 @@ export const UpdateProfilePicture = ({ setShow, pRef }) => {
   const refInput = useRef(null);
   const [image, setImage] = useState("");
   const [error, setError] = useState("");
+  const { user } = useSelector((state) => ({ ...state }));
   const handleImage = (e) => {
     let file = e.target.files[0];
     if (
@@ -73,10 +75,36 @@ export const UpdateProfilePicture = ({ setShow, pRef }) => {
           </div>
         )}
         <div className="old_pictures_wrap scrollbar">
-          <h4>your profile pictures</h4>
-          <div className="old_pictures"></div>
-          <h4>other pictures</h4>
-          <div className="old_pictures"></div>
+          <h4>Your Profile Pictures</h4>
+          <div className="old_pictures">
+            {photos
+              .filter(
+                (img) => img.folder === `${user.username}/profile_pictures`
+              )
+              .map((photo) => (
+                <img
+                  src={photo.secure_url}
+                  key={photo.public_id}
+                  alt=""
+                  onClick={() => setImage(photo.secure_url)}
+                />
+              ))}
+          </div>
+          <h4>Other Pictures</h4>
+          <div className="old_pictures">
+            {photos
+              .filter(
+                (img) => img.folder !== `${user.username}/profile_pictures`
+              )
+              .map((photo) => (
+                <img
+                  src={photo.secure_url}
+                  key={photo.public_id}
+                  alt=""
+                  onClick={() => setImage(photo.secure_url)}
+                />
+              ))}
+          </div>
         </div>
       </div>
       {image && (
