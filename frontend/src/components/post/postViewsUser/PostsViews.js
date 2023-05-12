@@ -10,17 +10,21 @@ import {
   getReactsAction,
   reactPostAction,
 } from "../../../redux/action/PostAction";
+import { CommentItem } from "./CommentItem";
 export const PostsViews = ({ post, user, profile }) => {
   const [visible, setVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [reacts, setReacts] = useState();
   const [check, setCheck] = useState();
   const [total, setTotal] = useState(0);
-
+  const [count, setCount] = useState(1);
+  const [comments, setComments] = useState([]);
   useEffect(() => {
     getPostReacts();
   }, [post]);
-
+  useEffect(() => {
+    setComments(post?.comments.reverse());
+  }, [post]);
   const getPostReacts = async () => {
     const res = await getReactsAction(post._id, user.token);
     console.log(res);
@@ -28,7 +32,9 @@ export const PostsViews = ({ post, user, profile }) => {
     setCheck(res.check);
     setTotal(res.total);
   };
-
+  const showMore = () => {
+    setCount((prev) => prev + 3);
+  };
   const reactHandler = async (type) => {
     reactPostAction(post._id, type, user.token);
     if (check == type) {
@@ -166,7 +172,7 @@ export const PostsViews = ({ post, user, profile }) => {
           <div className="reacts_count_num">{total > 0 && total}</div>
         </div>
         <div className="to_right">
-          <div className="comments_count">13 comments</div>
+          <div className="comments_count">{comments.length} comments</div>
           <div className="share_count">1 share</div>
         </div>
       </div>
@@ -233,7 +239,24 @@ export const PostsViews = ({ post, user, profile }) => {
       </div>
       <div className="comments_wrap">
         <div className="comments_order"></div>
-        <CommentViews user={user} />
+        <CommentViews
+          user={user}
+          postId={post._id}
+          setComments={setComments}
+          setCount={setCount}
+        />
+        {comments &&
+          comments
+            .sort((a, b) => {
+              return new Date(b.commentAt) - new Date(a.commentAt);
+            })
+            .slice(0, count)
+            .map((comment, i) => <CommentItem comment={comment} key={i} />)}
+        {count < comments.length && (
+          <div className="view_comments" onClick={() => showMore()}>
+            View more comments
+          </div>
+        )}
       </div>
       <>
         {showMenu && (
