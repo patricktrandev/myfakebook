@@ -10,22 +10,22 @@ const reactsArray = [
   },
   {
     name: "haha",
-    image: "../../../reacts/haha.gif",
+    image: "/reacts/haha.gif",
   },
   {
     name: "wow",
-    image: "../../../reacts/wow.gif",
+    image: "/reacts/wow.gif",
   },
   {
     name: "sad",
-    image: "../../../reacts/sad.gif",
+    image: "/reacts/sad.gif",
   },
   {
     name: "angry",
-    image: "../../../reacts/angry.gif",
+    image: "/reacts/angry.gif",
   },
 ];
-export const ReactPopUp = ({ visible, setVisible }) => {
+export const ReactPopUp = ({ visible, setVisible, reactHandler }) => {
   return (
     <>
       {visible && (
@@ -43,7 +43,11 @@ export const ReactPopUp = ({ visible, setVisible }) => {
           }}
         >
           {reactsArray.map((react, i) => (
-            <div className="react" key={i}>
+            <div
+              className="react"
+              key={i}
+              onClick={() => reactHandler(react.name)}
+            >
               <img src={react.image} alt="" />
             </div>
           ))}
