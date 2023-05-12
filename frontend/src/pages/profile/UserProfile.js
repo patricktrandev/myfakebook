@@ -14,9 +14,11 @@ import { NewPost } from "../../components/post/NewPost";
 import { PostsViews } from "../../components/post/postViewsUser/PostsViews";
 import { Photos } from "./Photos";
 import { Friends } from "./Friends";
+import { UserIntro } from "../../components/profile/intro/UserIntro";
 export const UserProfile = ({ setCreatePostVisible }) => {
   const { username } = useParams();
   const navigate = useNavigate();
+  const [otherName, setOthername] = useState();
   const { user } = useSelector((state) => ({ ...state }));
   const [photos, setPhotos] = useState({});
   var userName = username === undefined ? user.username : username;
@@ -29,6 +31,10 @@ export const UserProfile = ({ setCreatePostVisible }) => {
   useEffect(() => {
     getProfile();
   }, [userName]);
+  useEffect(() => {
+    setOthername(profile?.details?.otherName);
+  }, [profile]);
+
   var visitor = userName === user.username ? false : true;
   console.log(userName);
   const path = `${userName}/*`;
@@ -91,6 +97,7 @@ export const UserProfile = ({ setCreatePostVisible }) => {
             photos={photos.resources}
           />
           <ProfilePicture
+            otherName={otherName}
             profile={profile}
             visitor={visitor}
             photos={photos.resources}
@@ -104,6 +111,11 @@ export const UserProfile = ({ setCreatePostVisible }) => {
             <PeopleYouMayKnow />
             <div className="profile_grid">
               <div className="profile_left">
+                <UserIntro
+                  detailss={profile.details}
+                  visitor={visitor}
+                  setOthername={setOthername}
+                />
                 <Photos photos={photos} />
                 <Friends />
                 <div className="relative_fb_copyright">

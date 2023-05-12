@@ -1,13 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { UpdateProfilePicture } from "./updateProfile/UpdateProfilePicture";
 import useClickOutside from "../../helpers/outsideClick";
 
-export const ProfilePicture = ({ profile, visitor, photos }) => {
+export const ProfilePicture = ({ profile, visitor, photos, otherName }) => {
   const [show, setShow] = useState(false);
+
   const pRef = useRef(null);
   let img = profile?.picture;
   let firstName = profile?.first_name;
   let lastName = profile?.last_name;
+  console.log(profile);
 
   return (
     <div className="profile_img_wrap">
@@ -37,7 +39,7 @@ export const ProfilePicture = ({ profile, visitor, photos }) => {
         <div className="profile_w_col">
           <div className="profile_name">
             {firstName} {lastName}
-            <div className="othername">(Othername)</div>
+            <div className="othername">{`(${otherName})`}</div>
           </div>
           <div className="profile_friend_count"></div>
           <div className="profile_friend_imgs"></div>
