@@ -24,12 +24,12 @@ export const ImagePreview = ({
         setError(
           `${img.name} format is unsupported ! Only Jpeg, Png, Webp, Gif are allowed.`
         );
-        //rmv duplicate
+        //rmv duplicate name file
         files = files.filter((item) => item.name !== img.name);
         return;
       } else if (img.size > 1024 * 1024) {
         setError(`${img.name} size is too large max 5mb allowed.`);
-        //rmv duplicate
+        //rmv duplicate name file
         files = files.filter((item) => item.name !== img.name);
         return;
       } else {
