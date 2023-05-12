@@ -1,6 +1,6 @@
 const express = require("express");
 const { authUser } = require("../middleware/userAuth");
-const { createPost, getAllPosts } = require("../controller/post");
+const { createPost, getAllPosts, comment } = require("../controller/post");
 const { reactPost, getReacts } = require("../controller/react");
 
 const router = express.Router();
@@ -12,5 +12,8 @@ router.get("/getAllPosts", authUser, getAllPosts);
 //react post
 router.put("/reactPost", authUser, reactPost);
 router.get("/getReacts/:id", authUser, getReacts);
+
+//comment
+router.put("/comment", authUser, comment);
 
 module.exports = router;

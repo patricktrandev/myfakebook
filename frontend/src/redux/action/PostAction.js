@@ -83,3 +83,24 @@ export const getReactsAction = async (postId, token) => {
     return error.response.data.message;
   }
 };
+export const commentAction = async (postId, comment, image, token) => {
+  try {
+    const { data } = await axios.put(
+      `http://localhost:8000/api/v1/comment`,
+      {
+        postId,
+        comment,
+        image,
+      },
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
