@@ -7,9 +7,9 @@ import useClickOutside from "../../../helpers/outsideClick";
 import { useSelector } from "react-redux";
 export const UpdateProfilePicture = ({ setShow, pRef, photos }) => {
   const popup = useRef(null);
-  useClickOutside(popup, () => {
-    setShow(false);
-  });
+  // useClickOutside(popup, () => {
+  //   setShow(false);
+  // });
   const refInput = useRef(null);
   const [image, setImage] = useState("");
   const [error, setError] = useState("");

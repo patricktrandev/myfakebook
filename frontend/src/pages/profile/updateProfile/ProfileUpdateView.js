@@ -52,7 +52,7 @@ export const ProfileUpdateView = ({
         console.log(error);
       }
     },
-    [croppedAreaPixels]
+    [croppedAreaPixels, image, setImage]
   );
   const updateProfielPicture = async () => {
     try {

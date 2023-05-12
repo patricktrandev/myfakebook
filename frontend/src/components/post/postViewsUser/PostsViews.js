@@ -26,7 +26,7 @@ export const PostsViews = ({ post, user, profile }) => {
                   `updated ${
                     post.user.gender === "male" ? "his" : "her"
                   } profile picture`}
-                {post.type == "cover" &&
+                {post.type == "coverPicture" &&
                   `updated ${
                     post.user.gender === "male" ? "his" : "her"
                   } cover picture`}

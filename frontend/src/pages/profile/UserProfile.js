@@ -78,14 +78,18 @@ export const UserProfile = ({ setCreatePostVisible }) => {
     }
   };
   // console.log(path);
-  // console.log(profile);
+  console.log(profile);
   // console.log(photos);
   return (
     <div className="profile">
       <Header page="profile" />
       <div className="profile_top">
         <div className="profile_container">
-          <CoverProfile user={user} visitor={visitor} />
+          <CoverProfile
+            cover={profile.cover}
+            visitor={visitor}
+            photos={photos.resources}
+          />
           <ProfilePicture
             profile={profile}
             visitor={visitor}

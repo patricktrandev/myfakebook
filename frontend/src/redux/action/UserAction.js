@@ -18,3 +18,21 @@ export const updateprofilePictureAction = async (url, token) => {
     return error.response.data.message;
   }
 };
+export const updateCoverPictureAction = async (url, token) => {
+  try {
+    const { data } = await axios.put(
+      "http://localhost:8000/api/v1/updateCover",
+      {
+        url,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return "ok";
+  } catch (error) {
+    return error.response.data.message;
+  }
+};
